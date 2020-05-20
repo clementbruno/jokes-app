@@ -15,6 +15,7 @@ class Jokes extends Component {
     };
     this.addJokes = this.addJokes.bind(this);
     this.changeScore = this.changeScore.bind(this);
+    this.sortJokes = this.sortJokes.bind(this);
   }
 
   async componentDidMount() {
@@ -57,7 +58,7 @@ class Jokes extends Component {
     }
 
     this.setState((curStat) => ({
-      jokes: [...curStat.jokes, ...jokeList].sort((a, b) => a.score < b.score),
+      jokes: [...curStat.jokes, ...jokeList], // .sort((a, b) => a.score < b.score),
       loading: false,
     }));
   }
@@ -71,18 +72,23 @@ class Jokes extends Component {
   }
 
   changeScore(id, action) {
-    const newJokes = this.state.jokes
-      .map((joke) => {
-        if (joke.id === id) {
-          action === INCREASE ? (joke.score += 1) : (joke.score -= 1);
-        }
+    const newJokes = this.state.jokes.map((joke) => {
+      if (joke.id === id) {
+        action === INCREASE ? (joke.score += 1) : (joke.score -= 1);
+      }
 
-        return joke;
-      })
-      .sort((a, b) => a.score < b.score);
+      return joke;
+    });
+    // .sort((a, b) => a.score < b.score); In case we want to sort the jokes
 
     this.setState({
       jokes: newJokes,
+    });
+  }
+
+  sortJokes() {
+    return this.setState({
+      jokes: this.state.jokes.sort((a, b) => a.score < b.score),
     });
   }
 
@@ -101,7 +107,7 @@ class Jokes extends Component {
 
     return (
       <div className="Jokes">
-        <SidePanel addJokes={this.addJokes} />
+        <SidePanel addJokes={this.addJokes} sortJokes={this.sortJokes} />
         <div
           className={`Jokes__list ${
             this.state.loading ? "Jokes__list-loading" : ""

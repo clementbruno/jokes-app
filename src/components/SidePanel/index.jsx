@@ -12,6 +12,7 @@ const SidePanel = (props) => {
           aria-label="SidePanel__emoji"
           role="img"
           className="SidePanel__emoji"
+          onClick={props.sortJokes}
         >
           😂
         </span>
